@@ -11,13 +11,16 @@ class LinkingContext
   public:
     
 
-    LinkingContext() {
+    LinkingContext() 
+	{
       nextId = 1;
     }
 
-    void AddLink(GameObject* go) {
-      //ca marche probablement pas
-      AddGameObject(go, nextId++);
+    uint32_t AddLink(GameObject* go) 
+	{
+		uint32_t newId = nextId++;
+		AddGameObject(go, newId);
+		return newId;
     }
 
     std::optional<uint32_t> GetNetworkId(GameObject* go, bool ifError)
@@ -28,9 +31,7 @@ class LinkingContext
       
       else if (ifError)
       {
-        uint32_t newId = nextId++;
-        AddGameObject(go, newId);
-        return newId;
+		return AddLink(go);
       }
       else
         return -1;
