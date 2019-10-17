@@ -2,6 +2,15 @@
 
 void MemoryStream::Write(gsl::not_null<void*> data, size_t length)
 {
+
+	std::cout << "len " << length << std::endl;
+
+	std::byte b = (std::byte)length;
+
+	m_buffer.insert(std::end(m_buffer),
+		sizeof(b), //size
+		b); // value
+
     m_buffer.insert(std::end(m_buffer), 
                 reinterpret_cast<std::byte*>(data.get()), 
                 reinterpret_cast<std::byte*>(data.get()) + length);
@@ -23,9 +32,8 @@ std::string MemoryStream::ReadStr()
 {
     uint16_t strSize = Read<uint16_t>();
     auto str = Read(strSize);
-    std::string output;
 
-    std::transform(str.begin(), str.end(), output.begin(), [](std::byte b){ return (char)b; });
+	std::string output(reinterpret_cast<char*>(str.data()), str.size());
 
     return output;
 }
@@ -45,6 +53,12 @@ void MemoryStream::Write(gsl::span<std::byte> data)
 // vector3 implementation
 void MemoryStream::Write(Vector3& data)
 {
+	std::byte b = (std::byte)(sizeof(data));
+
+	m_buffer.insert(std::end(m_buffer),
+		sizeof(b), //size
+		b); // value
+
 	Write(data.x);
 	Write(data.y);
 	Write(data.z);
@@ -59,17 +73,19 @@ void MemoryStream::Write(Quaternion& data)
 	Write(data.w);
 }
 
-
-void MemoryStream::Read(Vector3& v)
+/*
+Vector3 MemoryStream::Read()
 {
-	Read(v.x);
-	Read(v.y);
-	Read(v.z);
-}
+	Vector3 v;
 
+	return v;
+}
+*/
 
 void MemoryStream::Read(Quaternion& q)
 {
+	q.x = Read<float>();
+
 	Read(q.x);
 	Read(q.y);
 	Read(q.z);

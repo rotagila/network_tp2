@@ -6,6 +6,7 @@
 #include <cassert>
 
 #include <gsl/gsl>
+#include <iostream>
 
 #include "utils.hpp"
 
@@ -49,22 +50,40 @@ public:
         m_cursor += length;
         return gsl::make_span(m_buffer.data() + (m_cursor - length), length);
     }
-
+	
     template<typename T>
     T Read()
     {
-        static_assert(std::is_copy_constructible<T>::value && 
-                    (std::is_arithmetic<T>::value || std::is_enum<T>::value), "A generic write only support primitive data type");
-        auto data = Read(sizeof(T));
-        T* outData = reinterpret_cast<T*>(data.data());
-        
-        if(ms_streamEndianess != DetectEndianness())
-        {
-            *outData = SwapEndian(*outData);
-        }
+		static_assert(std::is_copy_constructible<T>::value &&
+			(std::is_arithmetic<T>::value || std::is_enum<T>::value), "A generic write only support primitive data type");
 
-        return T(*outData);
+		int size = (int)(Read(1)[0]);
+
+		auto data = Read(size);
+		T* outData = reinterpret_cast<T*>(data.data());
+
+		if (ms_streamEndianess != DetectEndianness())
+		{
+			*outData = SwapEndian(*outData);
+		}
+
+		return T(*outData);
     }
+
+	//template<typename Vector3>
+	Vector3 ReadVector3() {
+		
+		Vector3 v;
+
+		int size = (int)(Read(1)[0]);
+		
+
+		v.x = Read<float>();
+		v.y = Read<float>();
+		v.z = Read<float>();
+
+		return v;
+	}
 
     std::string ReadStr();
 	void Read(Vector3& v);

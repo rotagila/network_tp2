@@ -45,6 +45,14 @@ public:
 	float x;
 	float y;
 	float z;
+
+	Vector3(){}
+
+	Vector3(float a, float b, float c) {
+		x = a;
+		y = b;
+		z = c;
+	}
 };
 
 class Quaternion
@@ -54,5 +62,14 @@ public:
 	float y;
 	float z;
 	float w;
+
+	Quaternion(){}
+
+	Quaternion(float a, float b, float c, float d) {
+		x = a;
+		y = b;
+		z = c;
+		w = d;
+	}
 };
 

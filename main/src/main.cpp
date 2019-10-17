@@ -3,6 +3,9 @@
 #include <uvw.hpp>
 #include <memory>
 
+#include "streams.hpp"
+#include "utils.hpp"
+
 void listen(uvw::Loop &loop) {
 	std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
 
@@ -70,7 +73,7 @@ void conn(uvw::Loop &loop) {
 }
 
 int main() {
-	auto loop = uvw::Loop::getDefault();
+	/*auto loop = uvw::Loop::getDefault();
 
 
 	int i = getchar();
@@ -84,6 +87,40 @@ int main() {
 
 	loop->run();
 
+	*/
+
+
+	MemoryStream stream = MemoryStream();
+
+	//float f = 4.2f;
+	//unsigned int i = 1000999;
+	
+
+	/*uint32_t i = 1000999;
+
+	stream.Write(i);
+
+	int j = stream.Read<int>();
+
+	std::cout << j << std::endl;*/
+
+
+
+	Vector3 v(42.42, 1.1, 0.1234);
+
+	stream.Write(v);
+
+	Vector3 result = stream.ReadVector3();
+
+	std::cout << result.x << " " << result.y << " " << result.z << " " << std::endl;
+
+	/*std::string c = "toto";
+
+	stream.WriteStr(c);
+
+	std::string result = stream.ReadStr();*/
+
+	//std::cout << result << std::endl;
 
 	std::cin.ignore();
 }
