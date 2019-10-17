@@ -43,7 +43,7 @@ void MemoryStream::Write(gsl::span<std::byte> data)
 }
 
 // vector3 implementation
-void MemoryStream::Write(const Vector3& data)
+void MemoryStream::Write(Vector3& data)
 {
 	Write(data.x);
 	Write(data.y);
@@ -51,7 +51,7 @@ void MemoryStream::Write(const Vector3& data)
 }
 
 // quaternion implementation
-void MemoryStream::Write(const Quaternion& data)
+void MemoryStream::Write(Quaternion& data)
 {
 	Write(data.x);
 	Write(data.y);

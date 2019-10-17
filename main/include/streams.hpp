@@ -20,8 +20,8 @@ public:
     void Write(gsl::not_null<void*> data, size_t length);
     void Write(gsl::span<const char> data);
     void Write(gsl::span<std::byte> data);
-	void Write(const Vector3& data);
-	void Write(const Quaternion& data);
+	  void Write(Vector3& data);
+	  void Write(Quaternion& data);
     void WriteStr(const std::string& data);
 
     template<typename T>

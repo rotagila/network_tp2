@@ -1,5 +1,6 @@
 #pragma once
 
+#include <game_object.hpp>
 #include <string>
 #include "streams.hpp"
 
@@ -12,5 +13,5 @@ public:
 	Quaternion rotation;
 
 	void Read(InputStream& in);
-	void Write(OutputStream& out) const;
+	void Write(OutputStream& out);
 };
