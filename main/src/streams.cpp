@@ -41,3 +41,39 @@ void MemoryStream::Write(gsl::span<std::byte> data)
 {
     m_buffer.insert(std::end(m_buffer), data.data(), data.data() + data.size_bytes());
 }
+
+// vector3 implementation
+void MemoryStream::Write(const Vector3& data)
+{
+	Write(data.x);
+	Write(data.y);
+	Write(data.z);
+}
+
+// quaternion implementation
+void MemoryStream::Write(const Quaternion& data)
+{
+	Write(data.x);
+	Write(data.y);
+	Write(data.z);
+	Write(data.w);
+}
+
+
+void MemoryStream::Read(Vector3& v)
+{
+	Read(v.x);
+	Read(v.y);
+	Read(v.z);
+}
+
+
+void MemoryStream::Read(Quaternion& q)
+{
+	Read(q.x);
+	Read(q.y);
+	Read(q.z);
+	Read(q.w);
+}
+
+

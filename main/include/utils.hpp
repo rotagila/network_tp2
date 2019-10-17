@@ -38,3 +38,21 @@ T SwapEndian(const T &val)
     std::reverse_copy(src.raw.begin(), src.raw.end(), dst.raw.begin());
     return dst.val;
 }
+
+class Vector3
+{
+public:
+	float x;
+	float y;
+	float z;
+};
+
+class Quaternion
+{
+public:
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
