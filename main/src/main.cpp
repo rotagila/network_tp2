@@ -15,9 +15,35 @@ void listen(uvw::Loop &loop) {
 
 		client->on<uvw::CloseEvent>([ptr = srv.shared_from_this()](const uvw::CloseEvent &, uvw::TCPHandle &) { ptr->close(); });
 		client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &client) { client.close(); });
-		client->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &) {
+		client->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &client) {
 			std::string s(evt.data.get(), evt.length);
 			std::cout << "received " << s << std::endl;
+
+			InputStream iStream(s);
+
+			Player p2;
+
+			p2.Read(iStream);
+			std::cout << "P1 :\n"
+				<< "Name : " << p2.name << "\n"
+				<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
+				<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+
+			p2.position.x += 10;
+			std::cout << "P1 :\n"
+				<< "Name : " << p2.name << "\n"
+				<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
+				<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+
+			OutputStream oStream;
+
+			p2.Write(oStream);
+
+			std::string s2(reinterpret_cast<char*>(oStream.Data().data()), oStream.Data().size());
+
+			client.write(s2.data(), s2.length());
+
+
 			});
 		srv.accept(*client);
 
@@ -25,10 +51,10 @@ void listen(uvw::Loop &loop) {
 
 		client->read();
 
-		auto dataWrite = std::unique_ptr<char[]>(new char[2]{ 'a', 'b' });
+		/*auto dataWrite = std::unique_ptr<char[]>(new char[2]{ 'a', 'b' });
 
 		client->write(std::move(dataWrite), 2);
-		std::cout << "send" << std::endl;
+		std::cout << "send" << std::endl;*/
 
 		});
 
@@ -48,24 +74,44 @@ void conn(uvw::Loop &loop) {
 
 		std::cout << "connected" << std::endl;
 
-		tcp.read();
+		OutputStream oStream;
 
-		std::vector<std::byte> bytes = {
-			std::byte(65),
-			std::byte(65)
-		};
+		Player p(
+			"toto",
+			Vector3(1, 2, 3),
+			Quaternion(4, 5, 6, 7)
+		);
 
-		std::string s(reinterpret_cast<char*>(bytes.data()), bytes.size());
+		std::cout << "P1 :\n"
+			<< "Name : " << p.name << "\n"
+			<< "Position : (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n"
+			<< "Rotation : (" << p.rotation.x << ", " << p.rotation.y << ", " << p.rotation.z << ", " << p.rotation.w << ")\n";
+
+		p.Write(oStream);
+
+		std::string s(reinterpret_cast<char*>(oStream.Data().data()), oStream.Data().size());
 
 		tcp.write(s.data(), s.length());
-		std::cout << "send" << std::endl;
 
-		//tcp.close();
+		tcp.read();
 		});
 
-	tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &) {
+	tcp->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &tcp) {
 		std::string s(evt.data.get(), evt.length);
 		std::cout << "received " << s << std::endl;
+
+		InputStream iStream(s);
+
+		Player p2;
+
+		p2.Read(iStream);
+		
+		std::cout << "P1 :\n"
+			<< "Name : " << p2.name << "\n"
+			<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
+			<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+
+		tcp.close();
 		});
 
 	tcp->connect(std::string{ "127.0.0.1" }, 4242);
@@ -74,7 +120,7 @@ void conn(uvw::Loop &loop) {
 }
 
 int main() {
-	/*auto loop = uvw::Loop::getDefault();
+	auto loop = uvw::Loop::getDefault();
 
 
 	int i = getchar();
@@ -88,14 +134,8 @@ int main() {
 
 	loop->run();
 
-	*/
-
-
-	MemoryStream stream = MemoryStream();
-	//float f = 4.2f;
-	//unsigned int i = 1000999;
+	//MemoryStream stream = MemoryStream();
 	
-
 	//String Example
 	/*std::string c = "toto";
 
@@ -136,7 +176,7 @@ int main() {
 	std::cout << result.x << " " << result.y << " " << result.z << " " << result.w << std::endl;*/
 
 	//Player Example
-	Player p(
+	/*Player p(
 		"toto",
 		Vector3(1, 2, 3),
 		Quaternion(4,5,6,7)
@@ -160,7 +200,7 @@ int main() {
 	std::cout << "P2 :\n"
 		<< "Name : " << p2.name << "\n"
 		<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
-		<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+		<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";*/
 
 	std::cin.ignore();
 }

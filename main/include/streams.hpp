@@ -28,7 +28,7 @@ public:
     template<typename T>
     void Write(T& data)
     {
-        static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "A generic write only support primitive data type");
+        static_assert(std::is_arithmetic<T>::value || std::is_enum<T>::value, "WRITE A generic write only support primitive data type");
 
         if(ms_streamEndianess != DetectEndianness())
         {
@@ -55,7 +55,7 @@ public:
     T Read()
     {
 		static_assert(std::is_copy_constructible<T>::value &&
-			(std::is_arithmetic<T>::value || std::is_enum<T>::value), "A generic write only support primitive data type");
+			(std::is_arithmetic<T>::value || std::is_enum<T>::value), "READ A generic write only support primitive data type");
 
 		int size = (int)(Read(1)[0]);
 
