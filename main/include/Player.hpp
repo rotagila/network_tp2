@@ -8,9 +8,13 @@ class Player : public GameObject
 {
 
 public:
-	Vector3 position;
 	std::string name;
+	Vector3 position;
 	Quaternion rotation;
+
+	Player(){}
+
+	Player(std::string n, Vector3 p, Quaternion r);
 
 	void Read(InputStream& in);
 	void Write(OutputStream& out);

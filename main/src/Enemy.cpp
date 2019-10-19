@@ -3,8 +3,8 @@
 void Enemy::Read(InputStream& in)
 {
 	type = in.ReadStr();
-	in.Read(position);
-	in.Read(rotation);
+	position = in.ReadVector3();
+	rotation = in.ReadQuat();
 }
 
 void Enemy::Write(OutputStream& out)

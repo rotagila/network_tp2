@@ -70,24 +70,10 @@ public:
 		return T(*outData);
     }
 
-	//template<typename Vector3>
-	Vector3 ReadVector3() {
-		
-		Vector3 v;
-
-		int size = (int)(Read(1)[0]);
-		
-
-		v.x = Read<float>();
-		v.y = Read<float>();
-		v.z = Read<float>();
-
-		return v;
-	}
 
     std::string ReadStr();
-	void Read(Vector3& v);
-	void Read(Quaternion& q);
+	Vector3 ReadVector3();
+	Quaternion ReadQuat();
     
     void Flush()
     {

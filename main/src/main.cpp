@@ -5,6 +5,7 @@
 
 #include "streams.hpp"
 #include "utils.hpp"
+#include "Player.hpp"
 
 void listen(uvw::Loop &loop) {
 	std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
@@ -91,11 +92,22 @@ int main() {
 
 
 	MemoryStream stream = MemoryStream();
-
 	//float f = 4.2f;
 	//unsigned int i = 1000999;
 	
 
+	//String Example
+	/*std::string c = "toto";
+
+	stream.WriteStr(c);
+
+	std::string result = stream.ReadStr();*/
+
+	//std::cout << result << std::endl;
+
+
+
+	//uint32 Example
 	/*uint32_t i = 1000999;
 
 	stream.Write(i);
@@ -105,22 +117,50 @@ int main() {
 	std::cout << j << std::endl;*/
 
 
-
-	Vector3 v(42.42, 1.1, 0.1234);
+	//Vector Example
+	/*Vector3 v(42.42, 1.1, 0.1234);
 
 	stream.Write(v);
 
 	Vector3 result = stream.ReadVector3();
 
-	std::cout << result.x << " " << result.y << " " << result.z << " " << std::endl;
+	std::cout << result.x << " " << result.y << " " << result.z << " " << std::endl;*/
 
-	/*std::string c = "toto";
+	//Quaternion Example
+	/*Quaternion q(42.42, 1.1, 0.1234, 1);
 
-	stream.WriteStr(c);
+	stream.Write(q);
 
-	std::string result = stream.ReadStr();*/
+	Quaternion result = stream.ReadQuat();
 
-	//std::cout << result << std::endl;
+	std::cout << result.x << " " << result.y << " " << result.z << " " << result.w << std::endl;*/
+
+	//Player Example
+	Player p(
+		"toto",
+		Vector3(1, 2, 3),
+		Quaternion(4,5,6,7)
+		);
+
+	OutputStream oStream = OutputStream();
+
+	p.Write(oStream);
+
+	InputStream iStream = InputStream(oStream.Data());
+
+	Player p2;
+	
+	p2.Read(iStream);
+
+	std::cout << "P1 :\n"
+		<< "Name : " << p.name << "\n"
+		<< "Position : (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n"
+		<< "Rotation : (" << p.rotation.x << ", " << p.rotation.y << ", " << p.rotation.z << ", " << p.rotation.w << ")\n";
+
+	std::cout << "P2 :\n"
+		<< "Name : " << p2.name << "\n"
+		<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
+		<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
 
 	std::cin.ignore();
 }

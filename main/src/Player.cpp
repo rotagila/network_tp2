@@ -1,10 +1,18 @@
 #include "..\include\Player.hpp"
 
+
+Player::Player(std::string n, Vector3 p, Quaternion r) {
+	name = n;
+	position = p;
+	rotation = r;
+}
+
+
 void Player::Read(InputStream& in)
 {
 	name = in.ReadStr();
-	in.Read(position);
-	in.Read(rotation);
+	position = in.ReadVector3();
+	rotation = in.ReadQuat();
 }
 
 void Player::Write(OutputStream& out)
