@@ -120,7 +120,7 @@ void conn(uvw::Loop &loop) {
 }
 
 int main() {
-	auto loop = uvw::Loop::getDefault();
+/*	auto loop = uvw::Loop::getDefault();
 
 
 	int i = getchar();
@@ -133,7 +133,7 @@ int main() {
 		conn(*loop);
 
 	loop->run();
-
+*/
 	//MemoryStream stream = MemoryStream();
 	
 	//String Example
@@ -176,10 +176,10 @@ int main() {
 	std::cout << result.x << " " << result.y << " " << result.z << " " << result.w << std::endl;*/
 
 	//Player Example
-	/*Player p(
+	Player p(
 		"toto",
-		Vector3(1, 2, 3),
-		Quaternion(4,5,6,7)
+		Vector3(0.999, -499.999, 499.213),
+		Quaternion(0.002, 0.783, -0.261, 0.565)
 		);
 
 	OutputStream oStream = OutputStream();
@@ -200,7 +200,7 @@ int main() {
 	std::cout << "P2 :\n"
 		<< "Name : " << p2.name << "\n"
 		<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
-		<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";*/
+		<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
 
 	std::cin.ignore();
 }

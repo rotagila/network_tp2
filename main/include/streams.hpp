@@ -57,9 +57,13 @@ public:
 		static_assert(std::is_copy_constructible<T>::value &&
 			(std::is_arithmetic<T>::value || std::is_enum<T>::value), "READ A generic write only support primitive data type");
 
-		int size = (int)(Read(1)[0]);
+/*		int size = (int)(Read(1)[0]);
 
-		auto data = Read(size);
+		std::cout << "data size : " << size << std::endl;
+
+		auto data = Read(size);*/
+
+		auto data = Read(sizeof(T));
 		T* outData = reinterpret_cast<T*>(data.data());
 
 		if (ms_streamEndianess != DetectEndianness())
@@ -69,7 +73,6 @@ public:
 
 		return T(*outData);
     }
-
 
     std::string ReadStr();
 	Vector3 ReadVector3();
