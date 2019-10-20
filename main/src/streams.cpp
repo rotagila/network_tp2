@@ -32,8 +32,29 @@ std::string MemoryStream::ReadStr()
 {
     uint8_t strSize = Read<uint8_t>();
     auto str = Read(strSize);
+	std::cout << "remaining size :" << RemainingSize() << std::endl;
 
-	std::string output(reinterpret_cast<char*>(str.data()), str.size());
+	std::string s(reinterpret_cast<char*>(Data().data()), Data().size());
+
+	std::cout << "stream data " << s << std::endl;
+
+	std::cout << str.data() << std::endl;
+
+	std::string output = "";
+
+	int i = 0;
+
+	for each (std::byte b in str)
+	{
+		std::cout << i << std::endl;
+		i++;
+		output += (char)b;
+		std::cout << output;
+	}
+
+	//std::string output(reinterpret_cast<char*>(str.data()), str.size());
+
+	std::cout << "mais bordel" << std::endl;
 
     return output;
 }

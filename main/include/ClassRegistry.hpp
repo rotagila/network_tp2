@@ -11,14 +11,7 @@ class ClassRegistry
 {
 public:
 
-
-
-	static ClassRegistry& Get()
-	{
-    if (instance != nullptr)
-      instance = new ClassRegistry();
-		return *instance;
-	}
+	static ClassRegistry* Get();
 
 	template<class T>
 	void RegisterClass()
@@ -27,21 +20,23 @@ public:
 		classCreators[T::mClassID] = T::CreateInstance;
 	}
 
-	GameObject Create(uint32_t classId)
+	GameObject *Create(uint32_t classId)
 	{
-		GameObject go;
+		GameObject *go = new GameObject();
+		
+		/*RegisterClass<GameObject>();
 
-		std::function<GameObject()> creator = classCreators[classId];
-		go = creator();
+		std::function<GameObject*()> creator = classCreators[classId];
+
+		go = creator();*/
 		
 		return go;
 	}
 
 
 private:
-	std::map<uint32_t, std::function<GameObject()>> classCreators;
+	std::map<uint32_t, std::function<GameObject*()>> classCreators;
+  ClassRegistry();
   static ClassRegistry* instance;
-  //ClassRegistry();
 
- 
 };

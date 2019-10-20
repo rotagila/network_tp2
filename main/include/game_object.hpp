@@ -9,14 +9,18 @@ using ReplicationClassID = uint32_t;
 enum : ReplicationClassID{mClassID = id};                           \
 virtual ReplicationClassID ClassID() const  { return mClassID;}     \
 static GameObject* CreateInstance() {return new className();}       \
+//ClassRegistry::Get()->RegisterClass<GameObject>();
 
 class GameObject
 {
 public:
-
 	REPLICATED('GOBJ', GameObject);
 
 	virtual void Read(MemoryStream& in){}
 	virtual void Write(MemoryStream& out){}
 	virtual void Destroy(){}
+
+
+	GameObject() {
+	}
 };

@@ -5,6 +5,7 @@ set(replication_sources src/main.cpp
                         src/streams.cpp
 						src/Enemy.cpp
 						src/Player.cpp
+						src/ClassRegistry.cpp
 						)
 
 include_directories(include)

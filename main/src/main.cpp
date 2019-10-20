@@ -6,6 +6,8 @@
 #include "streams.hpp"
 #include "utils.hpp"
 #include "Player.hpp"
+#include "ReplicationManager.hpp"
+
 
 void listen(uvw::Loop &loop) {
 	std::shared_ptr<uvw::TCPHandle> tcp = loop.resource<uvw::TCPHandle>();
@@ -17,31 +19,23 @@ void listen(uvw::Loop &loop) {
 		client->on<uvw::EndEvent>([](const uvw::EndEvent &, uvw::TCPHandle &client) { client.close(); });
 		client->on<uvw::DataEvent>([](const uvw::DataEvent& evt, uvw::TCPHandle &client) {
 			std::string s(evt.data.get(), evt.length);
-			std::cout << "received " << s << std::endl;
+			std::cout << "received" << std::endl;
 
 			InputStream iStream(s);
 
-			Player p2;
+			ReplicationManager RM = ReplicationManager();
 
-			p2.Read(iStream);
-			std::cout << "P1 :\n"
-				<< "Name : " << p2.name << "\n"
-				<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
-				<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+			RM.ReplicateReadStream(iStream);
 
-			p2.position.x += 10;
-			std::cout << "P1 :\n"
-				<< "Name : " << p2.name << "\n"
-				<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
-				<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+			for (GameObject *go : RM.replicatedGameObject) {
+				Player* p = (dynamic_cast<Player*>(go));
 
-			OutputStream oStream;
+				std::cout << "P1 :\n"
+					<< "Name : " << p->name << "\n"
+					<< "Position : (" << p->position.x << ", " << p->position.y << ", " << p->position.z << ")\n"
+					<< "Rotation : (" << p->rotation.x << ", " << p->rotation.y << ", " << p->rotation.z << ", " << p->rotation.w << ")\n";
+			}
 
-			p2.Write(oStream);
-
-			std::string s2(reinterpret_cast<char*>(oStream.Data().data()), oStream.Data().size());
-
-			client.write(s2.data(), s2.length());
 
 
 			});
@@ -65,6 +59,8 @@ void listen(uvw::Loop &loop) {
 
 }
 
+
+
 void conn(uvw::Loop &loop) {
 	auto tcp = loop.resource<uvw::TCPHandle>();
 
@@ -76,18 +72,29 @@ void conn(uvw::Loop &loop) {
 
 		OutputStream oStream;
 
-		Player p(
-			"toto",
-			Vector3(1, 2, 3),
-			Quaternion(4, 5, 6, 7)
+
+		ReplicationManager RM = ReplicationManager();
+
+		std::vector<GameObject*> world;
+
+		Player antoria(
+			"antoria",
+			Vector3(0.451, -455.236, 424.242),
+			Quaternion(0.002, 0.783, -0.261, 0.565)
 		);
 
-		std::cout << "P1 :\n"
-			<< "Name : " << p.name << "\n"
-			<< "Position : (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n"
-			<< "Rotation : (" << p.rotation.x << ", " << p.rotation.y << ", " << p.rotation.z << ", " << p.rotation.w << ")\n";
+		Player p1 = antoria;
 
-		p.Write(oStream);
+		std::cout << "P1 :\n"
+			<< "Name : " << p1.name << "\n"
+			<< "Position : (" << p1.position.x << ", " << p1.position.y << ", " << p1.position.z << ")\n"
+			<< "Rotation : (" << p1.rotation.x << ", " << p1.rotation.y << ", " << p1.rotation.z << ", " << p1.rotation.w << ")\n";
+
+		world.push_back(&antoria);
+
+		RM.replicatedGameObject.insert(&antoria);
+
+		RM.ReplicateWrite(oStream, world);
 
 		std::string s(reinterpret_cast<char*>(oStream.Data().data()), oStream.Data().size());
 
@@ -120,7 +127,7 @@ void conn(uvw::Loop &loop) {
 }
 
 int main() {
-/*	auto loop = uvw::Loop::getDefault();
+	auto loop = uvw::Loop::getDefault();
 
 
 	int i = getchar();
@@ -133,7 +140,7 @@ int main() {
 		conn(*loop);
 
 	loop->run();
-*/
+
 	//MemoryStream stream = MemoryStream();
 	
 	//String Example
@@ -141,9 +148,9 @@ int main() {
 
 	stream.WriteStr(c);
 
-	std::string result = stream.ReadStr();*/
+	std::string result = stream.ReadStr();
 
-	//std::cout << result << std::endl;
+	std::cout << result << std::endl;*/
 
 
 
@@ -176,7 +183,7 @@ int main() {
 	std::cout << result.x << " " << result.y << " " << result.z << " " << result.w << std::endl;*/
 
 	//Player Example
-	Player p(
+	/*Player p(
 		"toto",
 		Vector3(0.999, -499.999, 499.213),
 		Quaternion(0.002, 0.783, -0.261, 0.565)
@@ -201,6 +208,45 @@ int main() {
 		<< "Name : " << p2.name << "\n"
 		<< "Position : (" << p2.position.x << ", " << p2.position.y << ", " << p2.position.z << ")\n"
 		<< "Rotation : (" << p2.rotation.x << ", " << p2.rotation.y << ", " << p2.rotation.z << ", " << p2.rotation.w << ")\n";
+		*/
+
+	/*ReplicationManager RM = ReplicationManager();
+
+	std::vector<GameObject*> world;
+
+	Player antoria(
+		"antoria",
+		Vector3(0.451, -455.236, 424.242),
+		Quaternion(0.002, 0.783, -0.261, 0.565)
+	);
+
+	Player p1 = antoria;
+
+	std::cout << "P1 :\n"
+		<< "Name : " << p1.name << "\n"
+		<< "Position : (" << p1.position.x << ", " << p1.position.y << ", " << p1.position.z << ")\n"
+		<< "Rotation : (" << p1.rotation.x << ", " << p1.rotation.y << ", " << p1.rotation.z << ", " << p1.rotation.w << ")\n";
+
+	world.push_back(&antoria);
+
+	RM.replicatedGameObject.insert(&antoria);
+
+
+	MemoryStream stream = MemoryStream();
+
+	RM.ReplicateWrite(stream, world);
+
+	RM.ReplicateReadStream(stream);
+
+	for (GameObject *go : RM.replicatedGameObject) {
+		Player p = *(dynamic_cast<Player*>(go));
+		std::cout << "P1 :\n"
+			<< "Name : " << p.name << "\n"
+			<< "Position : (" << p.position.x << ", " << p.position.y << ", " << p.position.z << ")\n"
+			<< "Rotation : (" << p.rotation.x << ", " << p.rotation.y << ", " << p.rotation.z << ", " << p.rotation.w << ")\n";
+	}*/
+
+	
 
 	std::cin.ignore();
 }

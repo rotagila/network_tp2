@@ -8,6 +8,8 @@ class Enemy : public GameObject
 {
 
 public:
+	REPLICATED('ENEM', Enemy);
+
 	Vector3 position;
 	std::string type;
 	Quaternion rotation;

@@ -14,6 +14,9 @@ class LinkingContext
     LinkingContext() 
 	{
       nextId = 1;
+	  ptrToId = std::map<GameObject*, uint32_t>();
+	  idToPtr = std::map<uint32_t, GameObject*>();
+
     }
 
     uint32_t AddLink(GameObject* go) 
@@ -25,16 +28,18 @@ class LinkingContext
 
     std::optional<uint32_t> GetNetworkId(GameObject* go, bool ifError)
     {
-      auto it = ptrToId.find(go);
-      if (it != ptrToId.end())
-        return it->second;
-      
-      else if (ifError)
-      {
-		return AddLink(go);
-      }
-      else
-        return -1;
+		if (ptrToId.size() >= 0) {
+			auto it = ptrToId.find(go);
+			if (it != ptrToId.end())
+				return it->second;
+
+			else if (ifError)
+			{
+				return AddLink(go);
+			}
+			else
+				return -1;
+		}
       
     }
 

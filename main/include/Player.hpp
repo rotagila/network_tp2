@@ -6,8 +6,9 @@
 
 class Player : public GameObject
 {
-
 public:
+	REPLICATED('PLAY', Player);
+
 	std::string name;
 	Vector3 position;
 	Quaternion rotation;
@@ -15,6 +16,9 @@ public:
 	Player(){}
 
 	Player(std::string n, Vector3 p, Quaternion r);
+	Player(const Player& p);
+	Player(const GameObject& g);
+	
 
 	void Read(InputStream& in);
 	void Write(OutputStream& out);
