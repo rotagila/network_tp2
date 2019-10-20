@@ -1,15 +1,23 @@
+#pragma once
+
 #include "game_object.hpp"
 #include <map>
 #include <functional>
+
+
+
 
 class ClassRegistry
 {
 public:
 
+
+
 	static ClassRegistry& Get()
 	{
-		static ClassRegistry instance;
-		return instance;
+    if (instance != nullptr)
+      instance = new ClassRegistry();
+		return *instance;
 	}
 
 	template<class T>
@@ -32,5 +40,8 @@ public:
 
 private:
 	std::map<uint32_t, std::function<GameObject()>> classCreators;
+  static ClassRegistry* instance;
+  //ClassRegistry();
 
+ 
 };

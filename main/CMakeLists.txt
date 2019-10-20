@@ -14,6 +14,8 @@ set(replication_headers include/game_object.hpp
 						include/Enemy.hpp
 						include/LinkingContext.hpp
 						include/Player.hpp
+						include/ClassRegistry.hpp
+						include/ReplicationManager.hpp
 						)
 
 add_executable(tp2 ${replication_sources} ${replication_headers})

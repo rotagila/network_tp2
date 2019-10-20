@@ -16,7 +16,7 @@ public:
 
 	REPLICATED('GOBJ', GameObject);
 
-	virtual void Read(InputStream& in){}
-	virtual void Write(OutputStream& out){}
+	virtual void Read(MemoryStream& in){}
+	virtual void Write(MemoryStream& out){}
 	virtual void Destroy(){}
 };
