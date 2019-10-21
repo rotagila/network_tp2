@@ -19,10 +19,7 @@ public:
 	}
 
 
-
-
-
-  void ReplicateWrite(OutputStream& stream, std::vector<GameObject*>& totalGameObjects)
+  void Replicate(OutputStream& stream, std::vector<GameObject*>& totalGameObjects)
   {
     //inStream.Write(PT_ReplicationData, GetRequiredBits<PT_MAX>::Value);
     
@@ -37,6 +34,8 @@ public:
 			stream.Write(test);
 			if (go->ClassID() == 'PLAY')
 				((Player*)go)->Write(stream);
+			else if (go->ClassID() == 'ENEM')
+				((Enemy*)go)->Write(stream);
 			else
 				go->Write(stream);
 		}
@@ -44,12 +43,13 @@ public:
     
   }
 
-  void ReplicateReadStream(InputStream& stream) {
+  void Replicate(InputStream& stream) {
 
       std::unordered_set<GameObject*> receivedObjects;
       while (stream.RemainingSize() > 0)
       {
         GameObject* receivedGo = ReplicateReadObject(stream);
+		//std::cout << "data: " << receivedGo->ClassID() << std::endl;
         receivedObjects.insert(receivedGo);
       }
 
@@ -74,28 +74,43 @@ public:
 	  networkId = stream.Read<uint32_t>();
 	  classId = stream.Read<uint32_t>();
 
-
-	  //GameObject * go = (linkingContext->GetGameObject(networkId)).value();
-
-	  //GameObject *go;
-
-	  if (classId == 'PLAY') {
-		  Player *go = new Player(**(linkingContext->GetGameObject(networkId)));
+	  if (classId == 'PLAY') 
+	  {
+		  GameObject* go = linkingContext->GetGameObject(networkId).value();
 
 		  if (!go)
 		  {
 			  go = dynamic_cast<Player *>(ClassRegistry::Get()->Create(classId));
-
 			  linkingContext->AddGameObject(go, networkId);
 		  }
 
-		  go->name = "antoria";
+		  Player* p = new Player(*go);
+		  
+		  p->Read(stream);
 
-		  go->Read(stream);
-		  return go;
+		  return p;
 	  }
+	  else if(classId == 'ENEM')
+	  {
+		  GameObject* go = linkingContext->GetGameObject(networkId).value();
+
+		  if (!go)
+		  {
+			  go = dynamic_cast<Enemy*>(ClassRegistry::Get()->Create(classId));
+			  linkingContext->AddGameObject(go, networkId);
+		  }
+
+		  Enemy* e = new Enemy(*go);
+
+		  e->Read(stream);
+
+		  return e;
+	  }
+
 	  else
 	  {
+		  std::cout << "ReplicateGameObject unknown type" << std::endl;
+
 		  GameObject *go = (linkingContext->GetGameObject(networkId)).value();
 
 		  if (!go)
@@ -104,8 +119,14 @@ public:
 
 			  linkingContext->AddGameObject(go, networkId);
 		  }
+			
+		  // Type* t = new Type(*go);
+		  //t->read(stream);
+		  // return t;
+
 		  go->Read(stream);
 		  return go;
+
 	  }
 
   }

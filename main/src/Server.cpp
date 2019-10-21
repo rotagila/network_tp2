@@ -89,7 +89,7 @@ void Server::SendWorldToAll() {
 
 	OutputStream out;
 
-	RM.ReplicateWrite(out, world);
+	RM.Replicate(out, world);
 
 	std::string msg(reinterpret_cast<char*>(out.Data().data()), out.Data().size());
 
@@ -103,13 +103,13 @@ void Server::SendWorldToAll() {
 void Server::TestLoop() {
 	//Create your starting GameObjects here
 
-	Player *antoria = new Player(
+	Enemy *antoria = new Enemy(
 		"antoria",
 		Vector3(1.23, 4.5, 6.789),
 		Quaternion(0.002, 0.783, -0.261, 0.565)
 	);
 
-	Player *rotagg = new Player(
+	Enemy *rotagg = new Enemy(
 		"rotagg",
 		Vector3(0, 0, 0),
 		Quaternion(0.002, 0.783, -0.261, 0.565)

@@ -7,6 +7,7 @@
 #include "streams.hpp"
 #include "utils.hpp"
 #include "Player.hpp"
+#include "Enemy.hpp"
 #include "ReplicationManager.hpp"
 
 class Server {

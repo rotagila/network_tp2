@@ -20,9 +20,9 @@ public:
 		classCreators[T::mClassID] = T::CreateInstance;
 	}
 
-	GameObject *Create(uint32_t classId)
+	GameObject* Create(uint32_t classId)
 	{
-		GameObject *go = new GameObject();
+		GameObject* go = new GameObject();
 		
 		/*RegisterClass<GameObject>();
 
