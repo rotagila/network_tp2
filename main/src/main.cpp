@@ -3,19 +3,24 @@
 #include "Server.hpp"
 #include "Client.hpp"
 
-int main() {
+int main(int argc, char* argv[]) 
+{
+	std::string mode = std::string(argv[1]);
 
-	int i = getchar();
+	if (mode == "server")
+		Server server(argv[2], atoi(argv[3]));
 
-	if (i == '0')
+	else if(mode == "client")
+		Client client(argv[2], atoi(argv[3]));
+
+	else
 	{
-		Server server("127.0.0.1", 4242);
-		std::cout << "you are now a server" << std::endl;
+		std::cout << "Invalid args (... (client|server) ip port)" << std::endl;
+		return EXIT_FAILURE;
 	}
-	else {
-		Client client("127.0.0.1",4242);
-		std::cout << "you are now a client" << std::endl;
-	}
+
+	std::cout << "the end" << std::endl;
 
 	std::cin.ignore();
+
 }

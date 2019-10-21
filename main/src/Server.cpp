@@ -1,6 +1,5 @@
 #include "../include/Server.hpp"
 
-#include <thread>
 #include <chrono>
 
 using namespace std::chrono_literals;
@@ -25,7 +24,7 @@ void Server::Listen(uvw::Loop &loop) {
 
 	tcp->bind(address, port);
 	tcp->listen();
-	std::cin.ignore();
+	//std::cin.ignore();
 }
 
 
@@ -61,8 +60,7 @@ void Server::OnListenEvent(const uvw::ListenEvent &, uvw::TCPHandle &srv) {
 	client->read();
 
 	auto t = std::make_shared<std::thread>(&Server::TestLoop, *this);
-
-	t->join();
+	threads.emplace_back(t);
 }
 
 void Server::OnCloseEvent(const uvw::CloseEvent &, uvw::TCPHandle &client) {
@@ -110,7 +108,7 @@ void Server::TestLoop() {
 	);
 
 	Enemy *rotagg = new Enemy(
-		"rotagg",
+		"rotaggikoi",
 		Vector3(0, 0, 0),
 		Quaternion(0.002, 0.783, -0.261, 0.565)
 	);
@@ -125,14 +123,27 @@ void Server::TestLoop() {
 	world.push_back(rotagg);
 	world.push_back(kathaersys);
 
-	RM.replicatedGameObject.insert(world[0]);
-	RM.replicatedGameObject.insert(world[1]);
-	RM.replicatedGameObject.insert(world[2]);
+	int i = 0;
 
 	while (true) 
 	{
+		RM.replicatedGameObject.insert(world[0]);
+		RM.replicatedGameObject.insert(world[1]);
+		RM.replicatedGameObject.insert(world[2]);
+
 		SendWorldToAll();
-		std::this_thread::sleep_for(5s);
+		std::this_thread::sleep_for(3.5s);
+
+		reinterpret_cast<Enemy*>(world[0])->position.x += 1;
+
+		if(i%2 == 0)
+			reinterpret_cast<Enemy*>(world[1])->type = "dragon";
+		else 
+			reinterpret_cast<Enemy*>(world[1])->type = "rotaggikoi";
+
+		reinterpret_cast<Player*>(world[2])->position.z += 0.42;
+
+		i++;
 	}
 }
 

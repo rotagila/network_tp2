@@ -3,6 +3,7 @@
 #include <uvw.hpp>
 #include <memory>
 #include <cstdlib>
+#include <thread>
 
 #include "streams.hpp"
 #include "utils.hpp"
@@ -15,6 +16,7 @@ class Server {
 private :
 	std::string address;
 	int port;
+	std::vector<std::shared_ptr<std::thread>> threads;
 
 public :
 	std::vector<std::shared_ptr<uvw::TCPHandle>> clients;
