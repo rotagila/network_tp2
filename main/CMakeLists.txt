@@ -6,6 +6,8 @@ set(replication_sources src/main.cpp
 						src/Enemy.cpp
 						src/Player.cpp
 						src/ClassRegistry.cpp
+						src/Server.cpp
+						src/Client.cpp
 						)
 
 include_directories(include)
@@ -17,6 +19,8 @@ set(replication_headers include/game_object.hpp
 						include/Player.hpp
 						include/ClassRegistry.hpp
 						include/ReplicationManager.hpp
+						include/Server.hpp
+						include/Client.hpp
 						)
 
 add_executable(tp2 ${replication_sources} ${replication_headers})

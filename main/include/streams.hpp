@@ -48,11 +48,7 @@ public:
     {
         assert(length <= RemainingSize());
 
-		std::cout << "cursor begin at " << m_cursor << std::endl;
-
         m_cursor += length;
-
-		std::cout << "cursor end at " << m_cursor << std::endl;
 
         return gsl::make_span(m_buffer.data() + (m_cursor - length), length);
     }

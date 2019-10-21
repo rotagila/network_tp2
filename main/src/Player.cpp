@@ -1,14 +1,14 @@
 #include "..\include\Player.hpp"
 Player::Player(const GameObject& g){
 
-	/*if (&g != nullptr &&  g.ClassID() == 'PLAY')
+	/*if (g != null && g.ClassID() == 'PLAY')
 	{
-		Player p = (Player)g;
+		Player p = Player((Player)g);
 
-		name = p.name;
+		/*name = p.name;
 		position = p.position;
-		rotation = p.rotation;
-	}*/
+		rotation = p.rotation;*/
+	//}
 }
 
 Player::Player(std::string n, Vector3 p, Quaternion r) {
@@ -27,9 +27,6 @@ Player::Player(const Player & p)
 
 void Player::Read(InputStream& in)
 {
-	std::string s(reinterpret_cast<char*>(in.Data().data()), in.Data().size());
-
-	std::cout << "player data " << s << std::endl;
 	name = in.ReadStr();
 	position = in.ReadVector3();
 	rotation = in.ReadQuat();

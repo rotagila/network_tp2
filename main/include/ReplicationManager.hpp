@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <unordered_set>
 #include <functional>
@@ -8,6 +10,7 @@
 
 class ReplicationManager
 {
+
 public:
 	std::unordered_set <GameObject*> replicatedGameObject;
 
@@ -68,12 +71,6 @@ public:
 	  uint32_t networkId;
 	  uint32_t classId;
 
-
-	  std::string s(reinterpret_cast<char*>(stream.Data().data()), stream.Data().size());
-
-	  std::cout << "data " << s << std::endl;
-
-
 	  networkId = stream.Read<uint32_t>();
 	  classId = stream.Read<uint32_t>();
 
@@ -94,7 +91,6 @@ public:
 
 		  go->name = "antoria";
 
-		  std::cout << "mais fuck la vie" << std::endl;
 		  go->Read(stream);
 		  return go;
 	  }

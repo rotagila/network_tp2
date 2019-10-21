@@ -21,6 +21,5 @@ public:
 	virtual void Destroy(){}
 
 
-	GameObject() {
-	}
+	GameObject() {}
 };
