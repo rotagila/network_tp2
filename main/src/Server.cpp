@@ -4,13 +4,11 @@
 
 using namespace std::chrono_literals;
 
-Server::Server(std::string s, int p) {
+Server::Server(std::shared_ptr<uvw::Loop> loop, std::string s, int p) {
 	address = s;
 	port = p;
 
-	auto loop = uvw::Loop::getDefault();
 	Listen(*loop);
-	loop->run();
 }
 
 void Server::Listen(uvw::Loop &loop) {
@@ -59,7 +57,7 @@ void Server::OnListenEvent(const uvw::ListenEvent &, uvw::TCPHandle &srv) {
 
 	client->read();
 
-	auto t = std::make_shared<std::thread>(&Server::TestLoop, *this);
+	auto t = std::make_shared<std::thread>(&Server::TestLoop, this);
 	threads.emplace_back(t);
 }
 
@@ -87,7 +85,7 @@ void Server::SendWorldToAll() {
 
 	OutputStream out;
 
-	RM.Replicate(out, world);
+	RM->Replicate(out, world);
 
 	std::string msg(reinterpret_cast<char*>(out.Data().data()), out.Data().size());
 
@@ -127,9 +125,9 @@ void Server::TestLoop() {
 
 	while (true) 
 	{
-		RM.replicatedGameObject.insert(world[0]);
-		RM.replicatedGameObject.insert(world[1]);
-		RM.replicatedGameObject.insert(world[2]);
+		RM->replicatedGameObject.insert(world[0]);
+		RM->replicatedGameObject.insert(world[1]);
+		RM->replicatedGameObject.insert(world[2]);
 
 		SendWorldToAll();
 		std::this_thread::sleep_for(3.5s);

@@ -1,12 +1,10 @@
 #include "../include/Client.hpp"
 
-Client::Client(std::string s, int p) {
+Client::Client(std::shared_ptr<uvw::Loop> loop, std::string s, int p) {
 	address = s;
 	port = p;
 
-	auto loop = uvw::Loop::getDefault();
 	ConnectLoop(*loop);
-	loop->run();
 }
 
 void Client::ConnectLoop(uvw::Loop &loop) {
@@ -43,20 +41,18 @@ void Client::OnConnectEvent(const uvw::ConnectEvent &, uvw::TCPHandle &srv) {
 	srv.read();
 }
 
-void Client::OnErrorEvent(const uvw::ErrorEvent &, uvw::TCPHandle &srv) {
-	std::cout << "ERROR" << std::endl;
+void Client::OnErrorEvent(const uvw::ErrorEvent &evt, uvw::TCPHandle &srv) {
+	std::cout << "ERROR CODE : " << evt.code() << std::endl;
 }
 
 void Client::OnDataEvent(const uvw::DataEvent& evt, uvw::TCPHandle &srv) {
 	std::string msg(evt.data.get(), evt.length);
-	
-	std::cout << "data received : " << msg << std::endl;
-	
+		
 	InputStream in(msg);
 
-	RM.Replicate(in);
+	RM->Replicate(in);
 
-	for (GameObject *go : RM.replicatedGameObject) 
+	for (GameObject *go : RM->replicatedGameObject) 
 	{	
 		if (go->ClassID() == 'PLAY')
 		{

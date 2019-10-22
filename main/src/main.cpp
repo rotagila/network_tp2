@@ -5,19 +5,32 @@
 
 int main(int argc, char* argv[]) 
 {
+	std::cout << "once upon a time" << std::endl;
+
 	std::string mode = std::string(argv[1]);
 
-	if (mode == "server")
-		Server server(argv[2], atoi(argv[3]));
+	auto loop = uvw::Loop::getDefault();
 
-	else if(mode == "client")
-		Client client(argv[2], atoi(argv[3]));
+
+	if (mode == "server") 
+	{
+		Server server(loop, argv[2], atoi(argv[3]));
+		std::cout << "server started" << std::endl;
+	}
+
+	else if (mode == "client") 
+	{
+		Client client(loop, argv[2], atoi(argv[3]));
+		std::cout << "client started" << std::endl;
+	}
 
 	else
 	{
 		std::cout << "Invalid args (... (client|server) ip port)" << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	loop->run();
 
 	std::cout << "the end" << std::endl;
 

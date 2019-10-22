@@ -21,11 +21,11 @@ private :
 public :
 	std::vector<std::shared_ptr<uvw::TCPHandle>> clients;
 
-	ReplicationManager RM;
+	ReplicationManager *RM = new ReplicationManager();
 
 	std::vector<GameObject*> world;
 
-	Server(std::string ip, int port);
+	Server(std::shared_ptr<uvw::Loop> loop, std::string ip, int port);
 
 	void Listen(uvw::Loop &loop);
 

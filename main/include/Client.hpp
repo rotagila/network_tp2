@@ -18,9 +18,9 @@ private:
 	int port;
 
 public:
-	ReplicationManager RM;
+	ReplicationManager *RM = new ReplicationManager();
 
-	Client(std::string ip, int port);
+	Client(std::shared_ptr<uvw::Loop> loop, std::string ip, int port);
 
 	void ConnectLoop(uvw::Loop &loop);
 
