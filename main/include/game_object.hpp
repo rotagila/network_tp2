@@ -16,10 +16,16 @@ class GameObject
 public:
 	REPLICATED('GOBJ', GameObject);
 
+	GameObject() {}
+	~GameObject() {}
+
 	virtual void Read(MemoryStream& in){}
 	virtual void Write(MemoryStream& out){}
-	virtual void Destroy(){}
-
-
-	GameObject() {}
+	//virtual void Destroy(){}
+	virtual void Destroy(LinkingContext &lc)
+	{
+		std::cout << "destroy lc" << std::endl;
+		lc.RemoveGameObject(this);
+		this->~GameObject();
+	}
 };

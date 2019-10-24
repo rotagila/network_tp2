@@ -49,7 +49,6 @@ public:
       while (stream.RemainingSize() > 0)
       {
         GameObject* receivedGo = ReplicateReadObject(stream);
-		//std::cout << "data: " << receivedGo->ClassID() << std::endl;
         receivedObjects.insert(receivedGo);
       }
 
@@ -57,8 +56,8 @@ public:
       {
         if (receivedObjects.find(go) != receivedObjects.end())
         {
-          linkingContext->RemoveGameObject(go);
-          go->Destroy();
+          go->Destroy(&linkingContext);
+			//go->Destroy();
         }
       }
 

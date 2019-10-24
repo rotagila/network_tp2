@@ -13,7 +13,8 @@ public:
 	Vector3 position;
 	Quaternion rotation;
 
-	Player(){}
+	Player() {};
+	~Player() {};
 
 	Player(std::string n, Vector3 p, Quaternion r);
 	Player(const Player& p);

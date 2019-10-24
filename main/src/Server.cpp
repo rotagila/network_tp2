@@ -125,22 +125,46 @@ void Server::TestLoop() {
 
 	while (true) 
 	{
-		RM->replicatedGameObject.insert(world[0]);
-		RM->replicatedGameObject.insert(world[1]);
-		RM->replicatedGameObject.insert(world[2]);
+		if (i == 2)
+		{
+			world.pop_back();
+		}
+		if (i >= 2)
+		{
+			RM->replicatedGameObject.insert(world[0]);
+			RM->replicatedGameObject.insert(world[1]);
 
-		SendWorldToAll();
-		std::this_thread::sleep_for(3.5s);
+			SendWorldToAll();
+			std::this_thread::sleep_for(3.5s);
 
-		reinterpret_cast<Enemy*>(world[0])->position.x += 1;
+			reinterpret_cast<Enemy*>(world[0])->position.x += 1;
 
-		if(i%2 == 0)
-			reinterpret_cast<Enemy*>(world[1])->type = "dragon";
-		else 
-			reinterpret_cast<Enemy*>(world[1])->type = "rotaggikoi";
+			if (i % 2 == 0)
+				reinterpret_cast<Enemy*>(world[1])->type = "dragon";
+			else
+				reinterpret_cast<Enemy*>(world[1])->type = "rotaggikoi";
 
-		reinterpret_cast<Player*>(world[2])->position.z += 0.42;
+		}
+		else
+		{
+			RM->replicatedGameObject.insert(world[0]);
+			RM->replicatedGameObject.insert(world[1]);
+			RM->replicatedGameObject.insert(world[2]);
 
+			SendWorldToAll();
+			std::this_thread::sleep_for(3.5s);
+
+			reinterpret_cast<Enemy*>(world[0])->position.x += 1;
+
+			if (i % 2 == 0)
+				reinterpret_cast<Enemy*>(world[1])->type = "dragon";
+			else
+				reinterpret_cast<Enemy*>(world[1])->type = "rotaggikoi";
+
+			reinterpret_cast<Player*>(world[2])->position.z += 0.42;
+
+		}
+		
 		i++;
 	}
 }
