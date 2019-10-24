@@ -1,4 +1,5 @@
 #include "streams.hpp"
+#include <math.h>
 
 void MemoryStream::Write(gsl::not_null<void*> data, size_t length)
 {
@@ -31,13 +32,14 @@ void MemoryStream::WriteStr(const std::string& data)
 std::string MemoryStream::ReadStr()
 {
     uint8_t strSize = Read<uint8_t>();
-    auto str = Read(strSize);
+    gsl::span<std::byte> str = Read(strSize);
 
 	std::string output = "";
 
-	for each (std::byte b in str)
+
+	for(auto iter = str.begin(); iter != str.end(); ++iter)
 	{
-		output += (char)b;
+		output += (char)*iter;
 	}
 
 

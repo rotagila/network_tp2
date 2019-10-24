@@ -1,4 +1,4 @@
-#include "..\include\Enemy.hpp"
+#include "Enemy.hpp"
 
 Enemy::Enemy(const GameObject& g) {
 

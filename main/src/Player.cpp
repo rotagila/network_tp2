@@ -1,4 +1,4 @@
-#include "..\include\Player.hpp"
+#include "Player.hpp"
 Player::Player(const GameObject& g){
 
 	/*if (g != null && g.ClassID() == 'PLAY')
