@@ -4,7 +4,8 @@
 #include <cstdint>
 #include <optional>
 #include "streams.hpp"
-#include "game_object.hpp"
+//#include "game_object.hpp"
+class GameObject;
 
 class LinkingContext 
 {

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include "streams.hpp"
+#include "LinkingContext.hpp"
 
 using ReplicationClassID = uint32_t;
 

@@ -23,6 +23,16 @@ public:
   {
     //inStream.Write(PT_ReplicationData, GetRequiredBits<PT_MAX>::Value);
     
+	  std::vector<std::byte> protocolID;
+	  protocolID.push_back(std::byte(0xDA));
+	  protocolID.push_back(std::byte(0xDA));
+	  protocolID.push_back(std::byte(0xDA));
+	  protocolID.push_back(std::byte(0xDA));
+
+	  gsl::span<std::byte> bytes(protocolID);
+
+	  stream.Write(bytes);
+
     for (GameObject* go : totalGameObjects)
     {
 
@@ -45,23 +55,45 @@ public:
 
   void Replicate(InputStream& stream) {
 
-      std::unordered_set<GameObject*> receivedObjects;
-      while (stream.RemainingSize() > 0)
-      {
-        GameObject* receivedGo = ReplicateReadObject(stream);
-        receivedObjects.insert(receivedGo);
-      }
+      
+	  if (stream.RemainingSize() > 3) {
+		  
+		  std::cout << "i : " << std::endl;
 
-      for (GameObject* go : replicatedGameObject)
-      {
-        if (receivedObjects.find(go) != receivedObjects.end())
-        {
-          go->Destroy(&linkingContext);
-			//go->Destroy();
-        }
-      }
+		  bool sameProtocol = true;
+		  gsl::span<std::byte> protocolID = stream.Read(4);
+		  
+		  for (int i = 0; i < protocolID.size(); i++) {
+			  if (protocolID[i] != std::byte(0xDA)) {
+				  sameProtocol = false;
+				  std::cout << i << std::endl;
+			  }
+		  }
+		  if (sameProtocol) {
 
-      replicatedGameObject = receivedObjects;
+
+
+			  std::unordered_set<GameObject*> receivedObjects;
+
+			  while (stream.RemainingSize() > 0)
+			  {
+				  GameObject* receivedGo = ReplicateReadObject(stream);
+				  receivedObjects.insert(receivedGo);
+			  }
+
+			  for (GameObject* go : replicatedGameObject)
+			  {
+				  if (receivedObjects.find(go) != receivedObjects.end())
+				  {
+					  go->Destroy(*linkingContext);
+					  //go->Destroy();
+				  }
+			  }
+
+			  replicatedGameObject = receivedObjects;
+		  }
+
+	  }
 
   }
 
