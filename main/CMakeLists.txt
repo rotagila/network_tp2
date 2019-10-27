@@ -8,6 +8,7 @@ set(replication_sources src/main.cpp
 						src/ClassRegistry.cpp
 						src/Server.cpp
 						src/Client.cpp
+						src/LinkingContext.cpp
 						)
 
 include_directories(include)

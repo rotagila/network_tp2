@@ -12,60 +12,17 @@ class LinkingContext
   public:
     
 
-    LinkingContext() 
-	{
-      nextId = 1;
-	  ptrToId = std::map<GameObject*, uint32_t>();
-	  idToPtr = std::map<uint32_t, GameObject*>();
+    LinkingContext();
 
-    }
+    uint32_t AddLink(GameObject* go);
 
-    uint32_t AddLink(GameObject* go) 
-	{
-		uint32_t newId = nextId++;
-		AddGameObject(go, newId);
-		return newId;
-    }
+    std::optional<uint32_t> GetNetworkId(GameObject* go, bool ifError);
 
-    std::optional<uint32_t> GetNetworkId(GameObject* go, bool ifError)
-    {
-		if (ptrToId.size() >= 0) {
-			auto it = ptrToId.find(go);
-			if (it != ptrToId.end())
-				return it->second;
+    std::optional<GameObject*> GetGameObject(uint32_t id);
 
-			else if (ifError)
-			{
-				return AddLink(go);
-			}
-			else
-				return -1;
-		}
-      
-    }
+    void AddGameObject(GameObject* go, uint32_t id);
 
-    std::optional<GameObject*> GetGameObject(uint32_t id)
-    {
-      auto it = idToPtr.find(id);
-      if (it != idToPtr.end())
-        return it->second;
-
-      else
-        return nullptr;
-    }
-
-    void AddGameObject(GameObject* go, uint32_t id)
-    {
-      idToPtr[id] = go;
-      ptrToId[go] = id;
-    }
-
-    void RemoveGameObject(GameObject* go)
-    {
-      uint32_t id = ptrToId[go];
-      ptrToId.erase(go);
-      idToPtr.erase(id);
-    }
+    void RemoveGameObject(GameObject* go);
 
 private:
   std::map<uint32_t, GameObject*> idToPtr;

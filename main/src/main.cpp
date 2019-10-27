@@ -12,35 +12,6 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "Invalid args (... (client|server) ip port)" << std::endl;
 		return EXIT_FAILURE;
-
-		/*std::string mode = std::string("server");
-
-		auto loop = uvw::Loop::getDefault();
-
-
-		if (mode == "server")
-		{
-			Server server(loop, "127.0.0.1", 4242);
-			std::cout << "server started" << std::endl;
-		}
-
-		else if (mode == "client")
-		{
-			Client client(loop, "127.0.0.1", 4242);
-			std::cout << "client started" << std::endl;
-		}
-
-		else
-		{
-			std::cout << "Invalid args (... (client|server) ip port)" << std::endl;
-			return EXIT_FAILURE;
-		}
-
-		loop->run();
-
-		std::cout << "the end" << std::endl;
-
-		std::cin.ignore();*/
 	}
 	else
 	{

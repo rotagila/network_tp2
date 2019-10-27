@@ -140,8 +140,6 @@ void Server::TestLoop() {
 		{
 			std::cout << "Deleting Kathaersys" << std::endl;
 
-			// desole Valere, on avait un probleme avec Erase et Clear
-			// si on ne change pas ca avant le rendu, c est qu on a ff
 			std::vector<GameObject*> newWorld;
 			newWorld.push_back(antoria);
 			newWorld.push_back(rotagg);
@@ -149,11 +147,6 @@ void Server::TestLoop() {
 
 			world = newWorld;
 
-
-		//	std::cout << reinterpret_cast<Enemy*>(*world.begin())->type << std::endl;
-			//world.erase(std::remove(world.begin(), world.end(), world[2]), world.end());
-			//world.erase(world.begin() + 2);
-			//world.clear();
 		}
 		if (i >= 2)
 		{

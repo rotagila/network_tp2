@@ -14,24 +14,9 @@ public:
 	static ClassRegistry* Get();
 
 	template<class T>
-	void RegisterClass()
-	{
-		assert(classCreators.find(T::mClassID) == classCreators.end());
-		classCreators[T::mClassID] = T::CreateInstance;
-	}
+  void RegisterClass();
 
-	GameObject* Create(uint32_t classId)
-	{
-		GameObject* go = new GameObject();
-		
-		/*RegisterClass<GameObject>();
-
-		std::function<GameObject*()> creator = classCreators[classId];
-
-		go = creator();*/
-		
-		return go;
-	}
+  GameObject* Create(uint32_t classId);
 
 
 private:
