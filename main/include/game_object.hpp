@@ -25,7 +25,6 @@ public:
 	//virtual void Destroy(){}
 	virtual void Destroy(LinkingContext &lc)
 	{
-		std::cout << "destroy lc" << std::endl;
 		lc.RemoveGameObject(this);
 		this->~GameObject();
 	}

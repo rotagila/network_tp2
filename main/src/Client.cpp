@@ -49,7 +49,6 @@ void Client::OnDataEvent(const uvw::DataEvent& evt, uvw::TCPHandle &srv) {
 	std::string msg(evt.data.get(), evt.length);
 		
 	InputStream in(msg);
-
 	RM->Replicate(in);
 
 	for (GameObject *go : RM->replicatedGameObject) 
@@ -59,16 +58,16 @@ void Client::OnDataEvent(const uvw::DataEvent& evt, uvw::TCPHandle &srv) {
 			Player* p = (dynamic_cast<Player*>(go));
 			std::cout << "Player :\n"
 				<< "Name : " << p->name << "\n"
-				<< "Position : (" << p->position.x << ", " << p->position.y << ", " << p->position.z << ")\n"
-				<< "Rotation : (" << p->rotation.x << ", " << p->rotation.y << ", " << p->rotation.z << ", " << p->rotation.w << ")\n";
+				<< "Position : x: " << p->position.x << "  y:  " << p->position.y << "  z:  " << p->position.z << "\n"
+				<< "Rotation : x: " << p->rotation.x << "  y:  " << p->rotation.y << "  z:  " << p->rotation.z << "  w:  " << p->rotation.w << "\n";
 		}
 		else if (go->ClassID() == 'ENEM')
 		{
-			Enemy* p = (dynamic_cast<Enemy*>(go));
+			Enemy* e = (dynamic_cast<Enemy*>(go));
 			std::cout << "Enemy :\n"
-				<< "Type : " << p->type << "\n"
-				<< "Position : (" << p->position.x << ", " << p->position.y << ", " << p->position.z << ")\n"
-				<< "Rotation : (" << p->rotation.x << ", " << p->rotation.y << ", " << p->rotation.z << ", " << p->rotation.w << ")\n";
+				<< "Type : " << e->type << "\n"
+				<< "Position : x: " << e->position.x << "  y:  " << e->position.y << "  z:  " << e->position.z << "\n"
+				<< "Rotation : x: " << e->rotation.x << "  y:  " << e->rotation.y << "  z:  " << e->rotation.z << "  w:  " << e->rotation.w << "\n";
 		}
 		else
 		{

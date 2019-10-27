@@ -117,22 +117,51 @@ void Server::TestLoop() {
 		Quaternion(0.002, 0.783, -0.261, 0.565)
 	);
 
+	Player *null_reference = new Player(
+		"cataclimax > ubi",
+		Vector3(150, 150, 150),
+		Quaternion(0.002, 0.783, -0.261, 0.565)
+	);
+
 	world.push_back(antoria);
 	world.push_back(rotagg);
 	world.push_back(kathaersys);
+	world.push_back(null_reference);
+	
+	std::cout << "Last gameobject won't be updated (for testing purposes) during this execution." << std::endl;
 
 	int i = 0;
 
 	while (true) 
 	{
+		RM->replicatedGameObject.clear();
+
 		if (i == 2)
 		{
-			world.pop_back();
+			std::cout << "Deleting Kathaersys" << std::endl;
+
+			// desole Valere, on avait un probleme avec Erase et Clear
+			// si on ne change pas ca avant le rendu, c est qu on a ff
+			std::vector<GameObject*> newWorld;
+			newWorld.push_back(antoria);
+			newWorld.push_back(rotagg);
+			newWorld.push_back(null_reference);
+
+			world = newWorld;
+
+
+		//	std::cout << reinterpret_cast<Enemy*>(*world.begin())->type << std::endl;
+			//world.erase(std::remove(world.begin(), world.end(), world[2]), world.end());
+			//world.erase(world.begin() + 2);
+			//world.clear();
 		}
 		if (i >= 2)
 		{
+			std::cout << "Moving antoria on x axis, changing rotagg type" << std::endl;
+
 			RM->replicatedGameObject.insert(world[0]);
 			RM->replicatedGameObject.insert(world[1]);
+			RM->replicatedGameObject.insert(world[2]);
 
 			SendWorldToAll();
 			std::this_thread::sleep_for(3.5s);
@@ -147,9 +176,12 @@ void Server::TestLoop() {
 		}
 		else
 		{
+			std::cout << "Moving antoria on x axis, changing rotagg type, moving kathaersys on z axis" << std::endl;
+
 			RM->replicatedGameObject.insert(world[0]);
 			RM->replicatedGameObject.insert(world[1]);
 			RM->replicatedGameObject.insert(world[2]);
+			RM->replicatedGameObject.insert(world[3]);
 
 			SendWorldToAll();
 			std::this_thread::sleep_for(3.5s);
